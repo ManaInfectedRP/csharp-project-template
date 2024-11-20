@@ -1,30 +1,24 @@
 ﻿//  See https://aka.ms/new-console-template for more information
 //  Hangman
 
-using System;
 using System.Diagnostics;
 
 string[] possibleWords = ["New", "Console", "Template", "Https", "Information"];
 Random getRandom = new();
 string solution = possibleWords[getRandom.Next(possibleWords.Length)];
+string display = new('_', solution.Length);
 
-string? input;
-char? guess = null;
+Console.WriteLine(display);
 
-do
-{
-    Console.WriteLine("Please enter a character to guess with.");
-    input = Console.ReadLine();
-    Debug.Assert(input != null);
-    if (input.Length == 1) { guess = input[0]; }
-} while ( input.Length != 1);
-
+string guess = GetUserGuess();
 bool guessWasCorrect = false;
 
-foreach (char c in solution)
+for (int i = 0; i < solution.Length; i += 1)
 {
-    if (guess == c)
+    if (guess[0] == solution[i])
     {
+        display.Remove(i, 1);
+        display.Insert(i, guess);
         guessWasCorrect = true;
     }
 }
@@ -38,3 +32,18 @@ else
     Console.WriteLine($"{guess} didn't exist in the word");
     
 }
+
+string GetUserGuess()
+{
+    string? guess = null;
+    do
+    {
+        Console.WriteLine("Please enter a character to guess with.");
+        string? input = Console.ReadLine();
+        Debug.Assert(input != null);
+        if (input.Length == 1) { guess = input; }
+    } while ( guess == null);
+    
+    return guess;
+}
+
